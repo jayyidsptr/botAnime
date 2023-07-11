@@ -3,7 +3,24 @@ const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const crypto = require('crypto');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
 
+// Menangani permintaan POST dari Telegram
+app.post(`/${process.env.TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
+// Menjalankan server
+app.listen(port, () => {
+  console.log(`Server berjalan pada port ${port}`);
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/setwebhook.html');
+});
 
 
 // Token bot Telegram Anda
@@ -15,7 +32,7 @@ const bot = new TelegramBot(token, { polling: true });
 // Menangani perintah '/start'
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  const welcomeMessage = 'Halo! Selamat datang di PRA Anime Info.\n\n Kirimkan /info [judul_anime] untuk mendapatkan informasi tentang anime.\n Kirimkan /search [query] [pageNumber] untuk mencari daftar anime.\n Kirimkan /recommend untuk mendapatkan rekomendasi anime.\n Kirimkan /animenew [pageNumber] untuk mendapatkan update anime.\n Kirimkan /animetop [pageNumber] untuk mendapatkan top anime.';
+  const welcomeMessage = 'Halo! Selamat datang di PRA Anime BOT.\n\n Kirimkan /info [judul_anime] untuk mendapatkan informasi tentang anime.\n Kirimkan /search [query] [pageNumber] untuk mencari daftar anime.\n Kirimkan /recommend untuk mendapatkan rekomendasi anime.\n Kirimkan /animenew [pageNumber] untuk mendapatkan update anime.\n Kirimkan /animetop [pageNumber] untuk mendapatkan top anime.';
   bot.sendMessage(chatId, welcomeMessage);
 });
 
